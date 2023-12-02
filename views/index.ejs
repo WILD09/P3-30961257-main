@@ -17,7 +17,7 @@
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li class="nav-link px-2 link-secondary">KeyZone - Admin</li>
+        <li class="nav-link px-2 link-secondary">Pearl_Rose - Admin</li>
       </ul>
 
       <div class="col-md-3 text-end">
@@ -25,60 +25,64 @@
       </div>
       
     </header>
-  </div>
-  <div class="bd-example">
-    <table class="table">
-        <thead>
-      <tr>
-        <th>ID</th>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Descripción</th>
-        <th>Stock</th>
-        <th>Precio</th>
-        <th>Categoría</th>
-        <th>Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% producto.forEach(product => { %>
+    <div class="container">
+      <div class="titulo">
+          <h1>Pagina Productos: <%= producto.length %>
+          </h1>
+      </div>
+      <div>
+        <table class="table">
+            <thead>
           <tr>
-            <td><%= product.id %></td>
-            <td><%= product.code %></td> 
-            <td><%= product.name %></td>
-            <td><%= product.brand %></td>
-            <td><%= product.model %></td>
-            <td><%= product.description %></td>
-            <td><%= product.stock %></td>
-            <td><%= product.price %></td>
-            <td><% if(product.category_id == 1){ %>
-                    Crema Dental
-                <% } else if(product.category_id == 2) { %>
-                   Cepillo Dental
-                <% } else if(product.category_id == 3) { %>
-                   Enjuague Bucal
-                <% } else if(product.category_id == 4) { %>
-                   Hilo Dental
-                <% } else if(product.category_id == 5) { %>
-                   Spray Bucal
-            <% } %>
-            <td><a href="/edit/<%=product.id%>" class="btn btn-dark">Editar</a>
-              <a href="/delete/<%=product.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
-
-
-      </tr>
-    </tbody>
-  
-    </table>
+            <th>ID</th>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Descripción</th>
+            <th>Stock</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% producto.forEach(product => { %>
+              <tr>
+                <td><%= product.id %></td>
+                <td><%= product.code %></td> 
+                <td><%= product.name %></td>
+                <td><%= product.brand %></td>
+                <td><%= product.model %></td>
+                <td><%= product.description %></td>
+                <td><%= product.stock %></td>
+                <td><%= product.price %></td>
+                <td><% if(product.category_id == 1){ %>
+                        Crema Dental
+                    <% } else if(product.category_id == 2) { %>
+                       Cepillo Dental
+                    <% } else if(product.category_id == 3) { %>
+                       Enjuague Bucal
+                    <% } else if(product.category_id == 4) { %>
+                       Hilo Dental
+                    <% } else if(product.category_id == 5) { %>
+                       Spray Bucal
+                <% } %>
+                <td><a href="/edit/<%=product.id%>" class="btn btn-dark">Editar</a> <br> <br>
+                  <a href="/delete/<%=product.id%>" class="btn btn-dark">Eliminar</a>
+                </td>
+              <% }); %></td>
+    
+    
+          </tr>
+        </tbody>
+      
+        </table>
+      </div>
   </div>
 
-<a href="/insert" class="btn btn-dark">Insertar producto</a>
-</tbody>
 
+              <a href="/insert" class="btn btn-dark">Insertar producto</a>
 </body>
 </html>

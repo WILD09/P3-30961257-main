@@ -15,10 +15,15 @@ let querys = {
     updatecategory: 'UPDATE category SET name = ? WHERE id = ?',
     deleteproducto: 'DELETE FROM producto WHERE id = ?',
     deleteimagen: 'DELETE FROM imagen WHERE id = ?',
-    deletecategory: 'DELETE FROM category WHERE id = ?'
+    deletecategory: 'DELETE FROM category WHERE id = ?',
+    consultable: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.price AS price, producto.description AS description, imagen.url AS imagen_url, category.name AS category_name FROM category INNER JOIN producto ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id',
+    getdetalles: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.code AS producto_code, producto.price AS price, producto.description AS description, category.name AS category_name, producto.brand AS brand, producto.model AS model, product.stock AS stock, imagen.url AS imagen_url FROM producto INNER JOIN category ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id'
 
 }
 module.exports = {
+
+
+
     getproducto(){
         return new Promise((resolve, reject)=>{
             db.all(querys.getproducto, (err,rows)=>{
@@ -30,7 +35,7 @@ module.exports = {
     
     },
     
-    insertproducto(code, name, brand, model, description, stock, price, category_id){
+    insertproducto(code, name, brand, model, description, stock,  price, category_id){
         return new Promise((resolve, reject) => {
             db.run(querys.insertproducto, [code, name, brand, model, description, stock, price, category_id], (err) => {
                 if(err) reject(err);
@@ -49,7 +54,7 @@ module.exports = {
         })
     },
 
-    updateproducto(id, code, name, brand, model, description, stock, price, category_id){
+    updateproducto(id, code, name, brand, model, description, stock , price, category_id){
         return new Promise((resolve, reject) => {
             db.run(querys.updateproducto, [code, name, brand, model, description, stock, price, category_id, id], (err) => {
                 if(err) reject(err);
@@ -156,5 +161,82 @@ module.exports = {
         })
     },
     
-}
 
+    consultable(producto_name, description, category_name, model, brand, stock) {
+        return new Promise((resolve, reject) => {
+          let query = `
+            SELECT
+              producto.id AS producto_id,
+              producto.name AS producto_name,
+              producto.price AS price,
+              producto.description AS description,
+              producto.brand AS brand,
+              producto.model AS model,
+              producto.stock AS stock,
+              imagen.url AS imagen_url,
+              category.name AS category_name
+            FROM category
+            INNER JOIN producto ON category.id = producto.category_id
+            INNER JOIN imagen ON imagen.id = producto.id
+          `;
+      
+          let whereClause = '';
+      
+          if (producto_name) {
+            whereClause += `producto.name LIKE '%${producto_name}%'`;
+          }
+      
+          if (description) {
+            if (whereClause.length > 0) {
+              whereClause += ` AND `;
+            }
+            whereClause += `producto.description LIKE '%${description}%'`;
+          }
+      
+          if (category_name) {
+            if (whereClause.length > 0) {
+              whereClause += ` AND `;
+            }
+            whereClause += `category.name = '${category_name}'`;
+          }
+      
+          if (model) {
+            if (whereClause.length > 0) {
+              whereClause += ` AND `;
+            }
+            whereClause += `producto.model LIKE '%${model}%'`;
+          }
+      
+          if (brand) {
+            if (whereClause.length > 0) {
+              whereClause += ` AND `;
+            }
+            whereClause += `producto.brand LIKE '%${brand}%'`;
+          }
+
+          if (stock) {
+            if (whereClause.length > 0) {
+              whereClause += ` AND `;
+            }
+            whereClause += `producto.stock LIKE '%${stock}%'`;
+          }
+      
+          if (whereClause.length > 0) {
+            query += ` WHERE ${whereClause}`;
+          }
+      
+          db.all(query, (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+          });
+        });
+      },
+    getdetalles(){
+        return new Promise((resolve, reject)=>{
+           db.all(querys.getdetalles ,(err, rows) => { 
+              if(err) reject(err);
+              resolve(rows);
+            });
+        });
+    }
+}
