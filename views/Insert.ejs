@@ -55,11 +55,16 @@
                 </div>
                 <select name="category_id" required>
                     <option value="" >--Seleccione--</option>
-                    <option value="1">Crema Dental</option>
-                    <option value="2">Cepillo Dental</option>
-                    <option value="3">Enjuague Bucal</option>
-                    <option value="4">Hilo Dental</option>
-                    <option value="5">Spray Bucal</option>
+                    <% if (category) { %>
+                        <% for (let i = 0; i < category.length; i++){  %>
+                            <% if (category) { %>
+                                <option value="<%= category[i].id %>" id="category_id" name="category_id"><%= category[i].name %></option>
+        
+                            <% } %>
+                        <% } %>
+                    <% } else { %>
+                                <option value="">No existen categorias en el sistema</option>
+                        <% }   %>
                 </select>
                 <input type="submit" value="Insertar" href="/index">
             </form>
